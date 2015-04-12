@@ -43,7 +43,7 @@ public class FileDownloader{
 }
 ```
 
-以上几个参数设置后，就可以给组件设置下载的监视钩子，并开始下载
+After more than a few parameter settings, you can set the download monitor to hook assembly and start downloading
 ```java
 public class FileDownloader{
   // Start Download
@@ -321,7 +321,7 @@ registerReceiver(on_complete,
 // Custom logic after the download is complete
 BroadcastReceiver on_complete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-            Toast.makeText(ctxt, "已经下载完成提示", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctxt, "Has prompted the download is complete", Toast.LENGTH_LONG).show();
         }
     };
 ```
@@ -340,7 +340,7 @@ downloadmanager.remove(download_id);
 
 5, Custom progress bar interface provides hooks to monitor progress of the download method changes, customize the interface progress bar in the hook method
 ```java
-// 需要使用到系统 ContentObserver
+// Need to use the system ContentObserver
 class DownloadChangeObserver extends ContentObserver {
 
     public DownloadChangeObserver() {
