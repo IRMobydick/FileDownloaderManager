@@ -30,7 +30,7 @@ Download the file to run in the service, and encapsulated in the internal compon
 
 ==================
 
-### 组件的调用API
+### Invocation API component
 
 ```java
 public class FileDownloader{
@@ -310,7 +310,7 @@ BroadcastReceiver on_notification_click = new BroadcastReceiver() {
 
 
 
-3, 自定义下载完成通知栏信息事件
+3, Custom download is complete information about the event notification bar
 
 ```java
 // Activity onCreate method to start broadcasting in the activation notice
