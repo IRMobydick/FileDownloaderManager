@@ -7,23 +7,23 @@ FileDownloader library for android
 
 ### filedownload-samples: 
 
-1 需要下载的文件的网络地址<br>
+1 Network addresses need to download the file<br>
 
-2 下载后文件的保存路径<br>
+2 After downloading the file save path<br>
 
-3 用几个线程进行下载<br>
+3 Download a few threads<br>
 
 
 
 ### filedownload:
 
-下载文件在 service 中运行，并且封装在组件内部
+Download the file to run in the service, and encapsulated in the internal components
 
-1 下载进度可以显示在通知栏 <br>
+1 Download progress can be displayed in the notification bar<br>
 
-2 下载文件的程序最小化时，下载需要仍然继续 <br>
+2 When the program is minimized to download files, download the need continues<br>
 
-3 下载进行时，通知栏上显示了下载进度等信息
+3 Download it for a while, on the notification bar shows the progress of the download information
 
 
 
@@ -34,11 +34,11 @@ FileDownloader library for android
 
 ```java
 public class FileDownloader{
-  // 构造函数
-  // context Context 实例，一般为一个 activity 实例
-  // download_url 要下载的 URL
-  // file_save_dir 下载后的文件保存的位置
-  // thread_num  启动几个线程进行下载
+  // Constructor
+  // context Context        * Instance, usually an activity instance
+  // download_url           * URL to download
+  // file_save_dir          * After downloading the file save location
+  // thread_num             * Start several threads to download
   public FileDownloader(Context context, String download_url, File file_save_dir, int thread_num);
 }
 ```
@@ -46,9 +46,9 @@ public class FileDownloader{
 以上几个参数设置后，就可以给组件设置下载的监视钩子，并开始下载
 ```java
 public class FileDownloader{
-  // 开始下载
-  // ProgressUpdateListener 监听下载数量的变化，listener 需要运行在UI线程
-  // 如果不需要监听可以设置为 null
+  // Start Download
+  // ProgressUpdateListener   * Monitor change in the number of downloads，listener   * You need to run in the UI thread
+  // If you do not monitor can be set to null
   public void download(ProgressUpdateListener listener);
 
   interface ProgressUpdateListener {
@@ -57,70 +57,70 @@ public class FileDownloader{
 }
 ```
 
-开始下载后，需要可以获取到下载的文件的名称和大小
+Name and size after the download begins, you need to be able to get to the downloaded file
 ```java
 public class FileDownloader{
-  // 获取要下载的文件的大小(单位为字节)
+  // Get To download the file size (in bytes)
   public int get_file_size();
 
-  // 获取要下载的文件的名字
+  // Get the name of the file to be downloaded
   public String get_file_name();
 
 }
 ```
 
-下载进行时，通知栏上显示了下载进度等信息，需要给通知栏信息注册一个点击事件，下面这个接口可以让组件的使用者设置点击时要打开的activity，在打开activity时带上 intent_extras 参数
+Download it for a while, on the notification bar shows the progress of the download information, the information needed to register a notification bar click event, following the component interface allows users to set Click to open activity, bring intent_extras parameters when opening activity
 ```java
 public void set_notification(Class activity_class, Bundle intent_extras);
 ```
 
-然后下载任务可以暂停
+Then download tasks can be suspended
 ```java
 public void pause_download();
 ```
 
-任务可以删除
+Tasks can be deleted
 ```java
 public void stop_download();
 ```
 
 
-Activity onPause 取消广播
+Activity onPause cancel broadcast
 ```java
 public void unregister_download_receiver();
 ```
 
 
-Activity onResume 激活广播
+Activity onResume activate broadcasting
 ```java
 public void register_download_receiver(ProgressUpdateListener listener);
 ```
 
 ```java
 public class FileDownloader{
-  // 构造函数
-  // context Context 实例，一般为一个 activity 实例
-  // download_url 要下载的 URL
-  // file_save_dir 下载后的文件保存的位置
-  // thread_num  启动几个线程进行下载
+  // Constructor
+  // context Context Instance, usually an activity instance
+  // download_url     * URL to download
+  // file_save_dir    * After downloading the file save location
+  // thread_num       * Start several threads to download
   public FileDownloader(Context context, String download_url, File file_save_dir, int thread_num);
 
-  // 获取要下载的文件的大小(单位为字节)
+  // Get To download the file size (in bytes)
   public int get_file_size();
 
-  // 获取要下载的文件的名字
+  // Get the name of the file to be downloaded
   public String get_file_name();
 
-  // 开始下载
-  // ProgressUpdateListener 监听下载数量的变化，listener 需要运行在UI线程
-  // 如果不需要监听可以设置为 null
+  // Start Download
+  // ProgressUpdateListener   * Monitor change in the number of downloads，listener   * You need to run in the UI thread
+  // If you do not monitor can be set to null
   public void download(ProgressUpdateListener listener);
 
   interface ProgressUpdateListener {
     public void on_update(int downloaded_size);
   }
 
-  // 设置通知栏信息的点击事件行为
+  // Setting the notification bar information click event behavior
   public void set_notification(Class activity_class, Bundle intent_extras);
 
   public void pause_download();
@@ -128,7 +128,7 @@ public class FileDownloader{
 }
 ```
 
-### 整体在 Activity 中的使用示例如下
+### Activity in the overall use of the example in the following
 
 ```java
 public class MainActivity extends Activity{
@@ -153,14 +153,14 @@ public class MainActivity extends Activity{
 
     fd.download(new ProgressUpdateListener(){
       public void on_update(int downloaded_size){
-        // 这个方法需要运行在UI线程
-        // 比如这里增加逻辑:在主界面显示下载进度条
-        // downloaded_size 单位是字节，表示已经下载了的字节数
+        // This approach needs to be run in the UI thread
+        // For example, increasing the logic here: download progress bar is displayed in the main interface
+        // downloaded_size Bytes, indicating the number of bytes has been downloaded
 
-        // 获取要下载的文件的大小(单位为字节)
+        // Get To download the file size (in bytes)
         fd.get_file_size();
 
-        // 获取要下载的文件的名字
+        // Get the name of the file to be downloaded
         fd.get_file_name();
       }
     });
@@ -179,14 +179,14 @@ public class MainActivity extends Activity{
 
     fd1.download(new ProgressUpdateListener(){
       public void on_update(int downloaded_size){
-        // 这个方法需要运行在UI线程
-        // 比如这里增加逻辑:在主界面显示下载进度条
-        // downloaded_size 单位是字节，表示已经下载了的字节数
+        // This approach needs to be run in the UI thread
+        // For example, increasing the logic here: download progress bar is displayed in the main interface
+        // downloaded_size Bytes, indicating the number of bytes has been downloaded
 
-        // 获取要下载的文件的大小(单位为字节)
+        // Get To download the file size (in bytes)
         fd1.get_file_size();
 
-        // 获取要下载的文件的名字
+        // Get the name of the file to be downloaded
         fd1.get_file_name();
       }
     });
@@ -197,7 +197,7 @@ public class MainActivity extends Activity{
 
 
 
-AndroidManiFest 设置
+AndroidManiFest Setup
 ```java
 <service android:name="com.mindpin.android.filedownloader.DownloadService" />
 
@@ -248,19 +248,19 @@ AndroidManiFest 设置
 </receiver>
 ```
 
-使用示例
+Examples of Use
 
 ```java
-Context context = // 某个 activity 实例
+Context context = // Examples of an activity
 String url = "http://www.baidu.com/img/bdlogo.gif";
 File save_dir  = new File("/sd/files");
 FileDownloader fd = new FileDownloader(context, url, save_dir, 2);
 
 fd.download(new ProgressUpdateListener(){
   public void on_update(int downloaded_size){
-    // 这个方法需要运行在UI线程
-    // 比如这里增加逻辑:在主界面显示下载进度条
-    // downloaded_size 单位是字节，表示已经下载了的字节数
+    // This approach needs to be run in the UI thread
+    // For example, increasing the logic here: download progress bar is displayed in the main interface
+    // downloaded_size Bytes, indicating the number of bytes has been downloaded
 
   }
 });
@@ -272,38 +272,38 @@ fd.download(new ProgressUpdateListener(){
 
 
 
-### DownloadManager API 相关说明
+### DownloadManager API instructions
 
-1, 启动下载，并显示通知栏进度条信息, 多个任务也同时显示在通知栏上
+1, Start the download and display the notification bar progress bar information, multiple tasks simultaneously displayed on the notification bar
 
 ```java
-// 初始化下载 URL 路径
+// Download URL path initialization
 Uri uri = Uri.parse("http://esharedev.oss-cn-hangzhou.aliyuncs.com/file/%E5%9B%BE%E7%89%87%E6%94%BE%E5%A4%A7%E7%BC%A9%E5%B0%8F%E6%97%8B%E8%BD%AC.mp4");
 
 DownloadManager.Request request = new Request(uri);
 
-// 设置下载目录，文件名
+// Set the download directory, file name
 request.setDestinationInExternalPublicDir("mindpin", "less_5mb.mp4");
 
-// 设置只允许在WIFI的网络下下载
+// Set only allowed under the WIFI network to download
 request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
 
-// 加入下载队列, 开始下载
+// Join the download queue to begin downloading
 int download_id = downloadmanager.enqueue(request);
 ```
 
-2, 自定义通知栏进度条信息点击事件
+2, Custom notification bar progress bar information click event
 
 ```java
-// 启动 Activity onCreate 方法里激活广播通知
+// Activity onCreate method to start broadcasting in the activation notice
 registerReceiver(on_notification_click,
                 new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
 
 
-// 自定义点击通知栏后要做的逻辑
+// Custom Click notification bar to do logic
 BroadcastReceiver on_notification_click = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-            Toast.makeText(ctxt, "通知栏点击提示", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctxt, "Click prompt notification bar", Toast.LENGTH_LONG).show();
         }
     };
 ```
@@ -313,12 +313,12 @@ BroadcastReceiver on_notification_click = new BroadcastReceiver() {
 3, 自定义下载完成通知栏信息事件
 
 ```java
-// 启动 Activity onCreate 方法里激活广播通知
+// Activity onCreate method to start broadcasting in the activation notice
 registerReceiver(on_complete,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
 
-// 自定义完成下载后的逻辑
+// Custom logic after the download is complete
 BroadcastReceiver on_complete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
             Toast.makeText(ctxt, "已经下载完成提示", Toast.LENGTH_LONG).show();
@@ -327,24 +327,24 @@ BroadcastReceiver on_complete = new BroadcastReceiver() {
 ```
 
 
-4, 删除下载任务
+4, Delete download task
 
 ```java
-// 初始化 downloadmanager
+// Initialization downloadmanager
 DownloadManager downloadmanager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 
-// download_id 为上面启动下载方法 downloadmanager.enqueue(request); 这里的返回值
+// download_id above to start the download method for downloadmanager.enqueue (request); return value here
 downloadmanager.remove(download_id);
 ```
 
 
-5, 自定义界面进度条, 提供监视下载进度变化的钩子方法，在钩子方法中自定义界面进度条
+5, Custom progress bar interface provides hooks to monitor progress of the download method changes, customize the interface progress bar in the hook method
 ```java
 // 需要使用到系统 ContentObserver
 class DownloadChangeObserver extends ContentObserver {
 
     public DownloadChangeObserver() {
-        // 这里的 handler 为自己定义的一个 Handler 类实例，用来处理更新进度条的相关数据操作
+        // Here's handler for a Handler class instance define yourself, to handle the relevant data to update the progress bar operations
         super(handler);
     }
 
@@ -355,10 +355,10 @@ class DownloadChangeObserver extends ContentObserver {
 
 }
 
-// button onClick事件里激活
+// button onClick Events in activation
 getContentResolver().registerContentObserver(CONTENT_URI, true, download_observer);
 
-// 更新进度条所需要的数据
+// Data needed to update the progress bar
 public void update_progress() {
     int[] bytes_and_status = new int[] {-1, -1, 0};
     DownloadManager.Query query = new DownloadManager.Query().setFilterById(download_id);
@@ -367,11 +367,11 @@ public void update_progress() {
         c = downloadmanager.query(query);
         if (c != null && c.moveToFirst()) {
             bytes_and_status[0] = c.getInt(c.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-            Log.i("到目前为止下载的大小 ", Integer.toString(bytes_and_status[0]));
+            Log.i("Now download size", Integer.toString(bytes_and_status[0]));
             bytes_and_status[1] = c.getInt(c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-            Log.i("总大小 ", Integer.toString(bytes_and_status[0]));
+            Log.i("The total size", Integer.toString(bytes_and_status[0]));
             bytes_and_status[2] = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
-            Log.i("下载状态 ", Integer.toString(bytes_and_status[0]));
+            Log.i("Download Status", Integer.toString(bytes_and_status[0]));
         }
     } finally {
         if (c != null) {
