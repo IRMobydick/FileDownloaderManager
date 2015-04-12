@@ -379,7 +379,7 @@ public void update_progress() {
         }
     }
 
-    // 需要用到 Hanlder 类来处理这些数据信息显示到进度条上
+    // Need to use Hanlder class to handle the data information is displayed on the progress bar
     handler.sendMessage(handler.obtainMessage(0, bytes_and_status[0], bytes_and_status[1], bytes_and_status[2]));
 }
 ```
