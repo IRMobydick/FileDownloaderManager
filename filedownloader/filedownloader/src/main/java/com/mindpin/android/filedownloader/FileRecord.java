@@ -14,7 +14,7 @@ public class FileRecord {
     private DBOpenHelper db_open_helper;
 
     public FileRecord(Context context) {
-        Log.i("调试db ", "true");
+        Log.i("Debugging db ", "true");
         db_open_helper = new DBOpenHelper(context);
     }
 
@@ -28,7 +28,7 @@ public class FileRecord {
         cursor.close();
         db.close();
 
-        Log.i("数据库中的 downloaded_size ", Integer.toString(downloaded_size));
+        Log.i("Database downloaded_size ", Integer.toString(downloaded_size));
 
 
 //        Map<Integer, Integer> logdata = get_data(path);
@@ -37,7 +37,7 @@ public class FileRecord {
 //                downloaded_size += entry.getValue();
 //        }
 //
-//        Log.i("数据库中的 downloaded_size ", Integer.toString(downloaded_size));
+//        Log.i("Database downloaded_size ", Integer.toString(downloaded_size));
 
         return downloaded_size;
     }
@@ -47,7 +47,7 @@ public class FileRecord {
         try {
             db = db_open_helper.getWritableDatabase();
         } catch (Exception e) {
-            Log.i("getWritableDatabase 错误 ", e.toString());
+            Log.i("getWritableDatabase Error", e.toString());
             e.printStackTrace();
             return;
         }
@@ -62,16 +62,16 @@ public class FileRecord {
             if (cursor.getCount() > 0) {
                 db.execSQL("update filesizelog set filesize=? where downpath=?",
                         new Object[]{filesize, path});
-                Log.i("更新 filesize ", Integer.toString(filesize));
+                Log.i("Update filesize ", Integer.toString(filesize));
             } else {
                 db.execSQL("insert into filesizelog(downpath, filesize) values(?,?)",
                         new Object[]{path, filesize});
 
-                Log.i("保存 filesize ", Integer.toString(filesize));
+                Log.i("Save filesize ", Integer.toString(filesize));
             }
 
             db.setTransactionSuccessful();
-            Log.i("更新 filesize ", "true");
+            Log.i("Update filesize ", "true");
         }finally{
             db.endTransaction();
         }
@@ -85,7 +85,7 @@ public class FileRecord {
         if(cursor.moveToFirst()) {
             filesize = cursor.getInt(0);
         }
-        Log.i("filerecord 获取 filesize ", Integer.toString(filesize));
+        Log.i("filerecord Get filesize ", Integer.toString(filesize));
         cursor.close();
         db.close();
         return filesize;
@@ -107,7 +107,7 @@ public class FileRecord {
 
     public void save(String path,  Map<Integer, Integer> map){//int threadid, int position
 
-        Log.i("save运行过 ", "true");
+        Log.i("save Run-off", "true");
 
         int downlength;
         int threadid;
@@ -124,13 +124,13 @@ public class FileRecord {
                 downlength = entry.getValue();
                 threadid = entry.getKey();
 
-                Log.i("downlength值 ", Integer.toString(downlength));
+                Log.i("downlength value", Integer.toString(downlength));
 
 
 //                Cursor cursor = db.rawQuery("select threadid from filedownlog where downpath=? and threadid=?",
 //                        new String[]{path, String.valueOf(threadid)});
 //                if (cursor.getCount() > 0) {
-//                    Log.i("退出for ", Integer.toString(downlength));
+//                    Log.i("Drop out for ", Integer.toString(downlength));
 //                    continue;
 //                }
 
@@ -157,7 +157,7 @@ public class FileRecord {
             db = db_open_helper.getWritableDatabase();
         } catch (Exception e) {
         // } catch (android.database.sqlite.SQLiteDatabaseLockedException e) {
-            Log.i("getWritableDatabase 错误 ", e.toString());
+            Log.i("getWritableDatabase Error", e.toString());
             e.printStackTrace();
             return;
         }
@@ -190,7 +190,7 @@ public class FileRecord {
             db.execSQL("delete from filesizelog where downpath=?", new Object[]{path});
             db.close();
         } catch (Exception e) {
-            Log.i("数据库删除错误 ", e.toString());
+            Log.i("Delete database error", e.toString());
             e.printStackTrace();
         }
 
