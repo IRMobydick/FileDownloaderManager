@@ -29,22 +29,22 @@ public class FileDownloader implements Parcelable  {
     public HttpURLConnection conn;
     public static Context context;
     public FileRecord file_record;
-    /* 已下载文件长度 */
+    /* Downloaded file length */
     public int downloaded_size = 0;
-    /* 原始文件长度 */
+    /* The original file length */
     public int file_size = 0;
 
-    /* 线程数 */
+    /* Threads */
     public DownloadThread[] threads;
     public int thread_num;
 
-    /* 本地保存文件 */
+    /* Save the file locally */
     public File save_file;
-    /* 缓存各线程下载的长度*/
+    /* The length of each thread cache downloads */
     public Map<Integer, Integer> thread_data = new ConcurrentHashMap<Integer, Integer>();
-    /* 每条线程下载的长度 */
+    /* The length of each thread download */
     public int block;
-    /* 下载路径  */
+    /* Download Path  */
     public String download_url;
 
     Class activity_class;
@@ -69,19 +69,10 @@ public class FileDownloader implements Parcelable  {
 
     // Intent download_service;
 
-
-
-
-
-
     @Override
     public int describeContents() {
-        // TODO Auto-generated method stub
-
         return 0;
     }
-
-
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public FileDownloader createFromParcel(Parcel in) {
@@ -93,7 +84,6 @@ public class FileDownloader implements Parcelable  {
         }
     };
 
-
     public FileDownloader(Parcel in) {
         readFromParcel(in);
     }
@@ -101,7 +91,7 @@ public class FileDownloader implements Parcelable  {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-//        Log.i("download_url, 测试输出 ", download_url);
+//        Log.i("download_url, Test output ", download_url);
         dest.writeString(download_url);
         dest.writeBundle(intent_extras);
         dest.writeInt(thread_num);
@@ -116,7 +106,6 @@ public class FileDownloader implements Parcelable  {
         dest.writeInt(downloaded_size);
         dest.writeLong(when);
     }
-
 
     private void readFromParcel(Parcel in) {
         download_url = in.readString();
@@ -134,8 +123,6 @@ public class FileDownloader implements Parcelable  {
 
     }
 
-
-
     public int get_obj_id() {
         return obj_id;
     }
@@ -149,24 +136,19 @@ public class FileDownloader implements Parcelable  {
         return threads.length;
     }
 
-
-
-
-
     public int get_file_size() {
 //        try {
 //            Log.i("bind 中传 obj_id 111 ", Integer.toString(obj_id));
 //            Intent download_service = new Intent(context, DownloadService.class);
 //            context.bindService(download_service, m_connection, Context.BIND_AUTO_CREATE);
 //        } catch (Exception e) {
-//            Log.i("bindService 错误 ", e.toString());
+//            Log.i("bindService Error ", e.toString());
 //            e.printStackTrace();
 //        }
 //        FileRecord file_record = new FileRecord(context);
 //        file_size = file_record.get_filesize(download_url);
         return file_size;
     }
-
 
     protected synchronized void append(int size) {
         downloaded_size += size;
@@ -177,10 +159,8 @@ public class FileDownloader implements Parcelable  {
         this.file_record.update(this.download_url, this.thread_data);
     }
 
-
 //    public FileDownloader() {
 //    }
-
 
     public FileDownloader(Context context,
                           String download_url,
@@ -196,16 +176,15 @@ public class FileDownloader implements Parcelable  {
 
         if (this.obj_id == 0) {
             set_obj_id();
-            Log.i("生成 obj_id ", Integer.toString(obj_id));
+            Log.i("Generation obj_id ", Integer.toString(obj_id));
         }
 
         if (this.notice_id == 0) {
             this.notice_id = get_obj_id();
-            Log.i("生成 notice_id ", Integer.toString(notice_id));
+            Log.i("Generation notice_id ", Integer.toString(notice_id));
         }
 
     }
-
 
 //    public void recover() {
 //        this.file_record = null;
@@ -219,12 +198,10 @@ public class FileDownloader implements Parcelable  {
 //        this.download_url = null;
 //    }
 
-
     public void set_notification(Class activity_class, Bundle intent_extras) {
         this.activity_class = activity_class;
         this.intent_extras = intent_extras;
     }
-
 
     public String get_file_name() {
         String filename = this.download_url.substring(this.download_url.lastIndexOf('/') + 1);
@@ -243,33 +220,28 @@ public class FileDownloader implements Parcelable  {
         return filename;
     }
 
-
     private File create_dir(File file_dir) {
         file_dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + file_dir.getPath());
         if (file_dir.exists()) {
-            Log.i("目录已经存在 ", file_dir.getAbsolutePath());
+            Log.i("Directory already exists", file_dir.getAbsolutePath());
             return file_dir;
         }
 
-        Log.i("目录不存在 开始创建目录 ", "true");
+        Log.i("Directory does not exist to start creating a directory", "true");
 
         try{
             boolean result = file_dir.mkdirs();
             if (result) {
-                Log.i("目录创建成功 ", "true");
+                Log.i("Directory created successfully", "true");
                 return file_dir;
             }
         } catch(SecurityException se){
-            Log.i("目录创建失败 ", se.toString());
+            Log.i("Failed to create directory", se.toString());
         }
 
         return null;
     }
-
-
-
-
 
     public static Map<String, String> get_http_response_header(HttpURLConnection http) {
         Map<String, String> header = new LinkedHashMap<String, String>();
@@ -280,7 +252,6 @@ public class FileDownloader implements Parcelable  {
         }
         return header;
     }
-
 
     public static void print_response_header(HttpURLConnection http){
         Map<String, String> header = get_http_response_header(http);
@@ -294,14 +265,9 @@ public class FileDownloader implements Parcelable  {
         Log.i("FileDownloader", msg);
     }
 
-
     public String get_test() {
         return "hello world";
     }
-
-
-
-
 
     public void download(final ProgressUpdateListener listener) throws Exception{
 
@@ -325,12 +291,10 @@ public class FileDownloader implements Parcelable  {
         register_download_receiver(listener);
     }
 
-
     BroadcastReceiver download_pause_receiver;
     BroadcastReceiver download_stop_receiver;
     BroadcastReceiver download_done_receiver;
     BroadcastReceiver progress_listener_receiver;
-
 
     private void register_pause_receiver() {
         download_pause_receiver = new DownloadPauseReceiver() {
@@ -341,13 +305,13 @@ public class FileDownloader implements Parcelable  {
 
                 if (fd.get_obj_id() == FileDownloader.this.get_obj_id()) {
                 // if (fd.download_url == FileDownloader.this.download_url) {
-                    Log.i("调试 pause 接收正在下载的 downloaded_size 值 ", Integer.toString(fd.downloaded_size));
+                    Log.i("Debugging pause receive are downloading downloaded_size value", Integer.toString(fd.downloaded_size));
                     FileDownloader.this.downloaded_size = 0;
 
                     FileDownloader.this.file_size = 0;
-                    Log.i("调试 pause 接收正在下载的 file_size 值 ", Integer.toString(fd.file_size));
+                    Log.i("Debugging pause receive are downloading file_size value", Integer.toString(fd.file_size));
                 } else {
-                    Log.i("调试 广播接收到不同的 obj_id 3 ", Integer.toString(fd.get_obj_id()));
+                    Log.i("Debugging broadcast reception to a different obj_id 3", Integer.toString(fd.get_obj_id()));
                 }
 
             }
@@ -373,13 +337,13 @@ public class FileDownloader implements Parcelable  {
 
                 if (fd.get_obj_id() == FileDownloader.this.get_obj_id()) {
                 // if (fd.download_url == FileDownloader.this.download_url) {
-                    Log.i("调试 stop 接收正在下载的 downloaded_size 值 ", Integer.toString(fd.downloaded_size));
+                    Log.i("Debugging stop receiving value being downloaded downloaded_size", Integer.toString(fd.downloaded_size));
                     FileDownloader.this.downloaded_size = 0;
 
                     FileDownloader.this.file_size = 0;
-                    Log.i("调试 stop 接收正在下载的 file_size 值 ", Integer.toString(fd.file_size));
+                    Log.i("Debugging stop receiving value being downloaded file_size", Integer.toString(fd.file_size));
                 } else {
-                    Log.i("调试 stop 广播接收到不同的 obj_id 4 ", Integer.toString(fd.get_obj_id()));
+                    Log.i("Debugging stop broadcasting receive different obj_id 4", Integer.toString(fd.get_obj_id()));
                 }
 
             }
@@ -406,13 +370,13 @@ public class FileDownloader implements Parcelable  {
 
                 if (fd.get_obj_id() == FileDownloader.this.get_obj_id()) {
                 // if (fd.download_url == FileDownloader.this.download_url) {
-                    Log.i("调试 接收正在下载的 downloaded_size 值 ", Integer.toString(fd.downloaded_size));
+                    Log.i("Debugging receive value being downloaded downloaded_size", Integer.toString(fd.downloaded_size));
                     FileDownloader.this.downloaded_size = 0;
 
                     FileDownloader.this.file_size = 0;
-                    Log.i("调试 接收正在下载的 file_size 值 ", Integer.toString(fd.file_size));
+                    Log.i("Debugging receive value being downloaded file_size", Integer.toString(fd.file_size));
                 } else {
-                    Log.i("调试 广播接收到不同的 obj_id 2 ", Integer.toString(fd.get_obj_id()));
+                    Log.i("Debugging broadcast reception to a different obj_id 2", Integer.toString(fd.get_obj_id()));
                 }
 
             }
@@ -429,10 +393,7 @@ public class FileDownloader implements Parcelable  {
         context.unregisterReceiver(download_done_receiver);
     }
 
-
     private void register_listener_receiver(final ProgressUpdateListener listener) {
-
-
 
         progress_listener_receiver = new DownloadListenerReceiver() {
             @Override
@@ -442,43 +403,32 @@ public class FileDownloader implements Parcelable  {
 
                 if (fd.get_obj_id() == FileDownloader.this.get_obj_id()) {
                 // if (fd.download_url == FileDownloader.this.download_url) {
-                    Log.i("进入 listener receiver ", "true");
-                    Log.i("接收正在下载的 downloaded_size 值 ", Integer.toString(fd.downloaded_size));
+                    Log.i("Enter listener receiver", "true");
+                    Log.i("Reception being downloaded downloaded_size value", Integer.toString(fd.downloaded_size));
                     FileDownloader.this.downloaded_size = fd.downloaded_size;
-
                     FileDownloader.this.file_size = fd.file_size;
-
-                    Log.i("接收正在下载的 file_size 值 ", Integer.toString(fd.file_size));
-
+                    Log.i("Reception being downloaded file_size value", Integer.toString(fd.file_size));
                     FileDownloader.this.listener = listener;
                     FileDownloader.this.listener.on_update(fd.downloaded_size);
 
-
-
-
                 } else {
-                    Log.i("调试 广播接收到不同的 obj_id 1 ", Integer.toString(fd.get_obj_id()));
+                    Log.i("Debugging broadcast reception to a different obj_id 1", Integer.toString(fd.get_obj_id()));
                 }
 
             }
         };
 
-        context.registerReceiver(progress_listener_receiver,
-                new IntentFilter("app.action.download_listener_receiver"));
-
-
-
+        context.registerReceiver(progress_listener_receiver, new IntentFilter("app.action.download_listener_receiver"));
 
         FileRecord file_record = new FileRecord(context);
 
-        Log.i("重新获取暂停时数据 ", download_url);
+        Log.i("Pause retrieve data", download_url);
 
         FileDownloader.this.file_size = file_record.get_filesize(download_url);
         FileDownloader.this.downloaded_size = file_record.get_downloaded_size(download_url);
-        Log.i("downloaded_size 大小 ", Integer.toString(downloaded_size));
+        Log.i("downloaded_size size", Integer.toString(downloaded_size));
         FileDownloader.this.listener = listener;
         FileDownloader.this.listener.on_update(downloaded_size);
-
 
     }
 
@@ -496,12 +446,11 @@ public class FileDownloader implements Parcelable  {
             unregister_pause_receiver();
             unregister_stop_receiver();
         } catch (Exception e) {
-            Log.i("unregister 错误 ", "true");
+            Log.i("unregister error", "true");
             e.printStackTrace();
         }
 
     }
-
 
     public void register_download_receiver(ProgressUpdateListener listener) {
         try {
@@ -512,16 +461,14 @@ public class FileDownloader implements Parcelable  {
             register_done_receiver();
             register_listener_receiver(listener);
         } catch (java.lang.IllegalArgumentException e) {
-            Log.i("register IllegalArgumentException 错误 ", "true");
+            Log.i("register IllegalArgumentException error", "true");
             e.printStackTrace();
         } catch (Exception e) {
-            Log.i("register 错误 ", "true");
+            Log.i("register error", "true");
             e.printStackTrace();
         }
 
     }
-
-
 
     public void pause_download() {
 
@@ -531,19 +478,17 @@ public class FileDownloader implements Parcelable  {
                 return;
             }
 
-            Log.i("调试 正在下载的大小 ", Integer.toString(downloaded_size));
+            Log.i("Debugging is being downloaded size", Integer.toString(downloaded_size));
 
             should_pause = true;
 
-            Log.i("暂停下载 ", "true");
+            Log.i("Pause Download", "true");
             Log.i("obj_id ", Integer.toString(this.hashCode()));
-
             Intent download_service = new Intent(context, DownloadService.class);
-
             download_service.putExtra("download_manager", this);
             context.startService(download_service);
-
             should_pause = false;
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -554,40 +499,30 @@ public class FileDownloader implements Parcelable  {
 
         should_destroy = true;
 
-        Log.i("停止下载 ", "true");
+        Log.i("Stop downloading", "true");
         Log.i("obj_id ", Integer.toString(this.hashCode()));
         Intent download_service = new Intent(context, DownloadService.class);
         download_service.putExtra("download_manager", this);
         context.startService(download_service);
-
         should_destroy = false;
-
-        NotificationManager nm =
-                (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-
+        NotificationManager nm = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         nm.cancel(notice_id);
 
     }
 
-
     DownloadService m_service;
     boolean m_bound = false;
-
 
 //    private ServiceConnection m_connection = new ServiceConnection() {
 //
 //        @Override
-//        public void onServiceConnected(ComponentName className,
-//                                       IBinder service) {
+//        public void onServiceConnected(ComponentName className, IBinder service) {
 //            DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
 //            m_service = binder.getService();
 //
-//            Log.i("bind 中传 obj_id 222 ", Integer.toString(obj_id));
+//            Log.i("bind the pass obj_id 222 ", Integer.toString(obj_id));
 //            file_size = m_service.get_download_store(obj_id).file_size;
-//            Log.i("bind 中传 file_size 222 ", Integer.toString(file_size));
-//
-//
-//
+//            Log.i("bind the pass file_size 222 ", Integer.toString(file_size));
 //            m_bound = true;
 //
 //        }
@@ -595,53 +530,51 @@ public class FileDownloader implements Parcelable  {
 //        @Override
 //        public void onServiceDisconnected(ComponentName arg0) {
 //            // m_bound = false;
-//            Log.i("下载完毕 ", "true");
+//            Log.i("Downloaded", "true");
 //        }
 //    };
-
-
 
     public void init_connection(Context context) {
 
 //        try {
 //            this.file_record = new FileRecord(context);
 //        } catch (java.lang.VerifyError e) {
-//            Log.i("VerifyError 错误 ", e.getMessage());
+//            Log.i("VerifyError Error", e.getMessage());
 //            e.printStackTrace();
 //        }
 
         if (intent_extras != null) {
-            Log.i("intent_extras 取得值 ", intent_extras.getString("param_name1"));
+            Log.i("intent_extras Get value", intent_extras.getString("param_name1"));
             // return;
         }
         try {
             if (download_url == null) {
-                Log.i("download_url 没有取到值 ", "true");
-                Log.i("download_url 没有取到值 ", Integer.toString(thread_num));
+                Log.i("download_url did not get to the value", "true");
+                Log.i("download_url did not get to the value", Integer.toString(thread_num));
                 return;
             }
 
             if (save_file == null) {
-                Log.i("save_file 没有取到值 ", "true");
+                Log.i("save_file did not get to the value", "true");
                 this.save_file = Environment.getExternalStorageDirectory();
                 // return;
             }
 
             if (thread_num <= 0) {
-                Log.i("thread_num 没有取到值 ", "true");
+                Log.i("thread_num did not get to the value", "true");
                 return;
             }
 
-            Log.i("下载的 URL ", download_url);
-            Log.i("下载的 save_file path ", save_file.getAbsolutePath());
-            Log.i("下载的 thread_num thread_num ", Integer.toString(thread_num));
+            Log.i("Download URL", download_url);
+            Log.i("Download save_file path", save_file.getAbsolutePath());
+            Log.i("Download thread_num thread_num", Integer.toString(thread_num));
             this.file_record = new FileRecord(context);
-            Log.i("调试0 ", "true");
+            Log.i("Debugging 0", "true");
             URL url = new URL(this.download_url);
             if(!save_file.exists()) save_file.mkdirs();
-            Log.i("调试1 ", "true");
+            Log.i("Debugging 1", "true");
             this.threads = new DownloadThread[thread_num];
-            Log.i("调试2 ", "true");
+            Log.i("Debugging 2", "true");
             this.conn = (HttpURLConnection) url.openConnection();
             this.conn.setConnectTimeout(5 * 1000);
             this.conn.setRequestMethod("GET");
@@ -652,22 +585,19 @@ public class FileDownloader implements Parcelable  {
             this.conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)");
             this.conn.setRequestProperty("Connection", "Keep-Alive");
             this.conn.connect();
-            Log.i("调试3 ", "true");
+            Log.i("Debugging 3", "true");
             this.print_response_header(this.conn);
             if (this.conn.getResponseCode()==200) {
                 this.file_size = this.conn.getContentLength();
                 this.file_record.save_filezie(download_url, this.file_size);
 
-                Log.i("数据库获取的 filesize ", Integer.toString(file_record.get_filesize(download_url)));
-                Log.i("取得的文件大小 ", Integer.toString(file_size));
-                Log.i("初始化连接 文件大小 ", Integer.toString(this.file_size));
+                Log.i("Database acquisition filesize", Integer.toString(file_record.get_filesize(download_url)));
+                Log.i("Obtaining the file size", Integer.toString(file_size));
+                Log.i("Initialize the connection file size", Integer.toString(this.file_size));
                 if (this.file_size <= 0) throw new RuntimeException("Unknown file size ");
 
                 String filename = this.get_file_name();
                 this.save_file = new File(save_file, filename);
-
-
-
 
                 Map<Integer, Integer> logdata = this.file_record.get_data(download_url);
                 if(logdata.size()>0){
@@ -675,94 +605,84 @@ public class FileDownloader implements Parcelable  {
                         this.thread_data.put(entry.getKey(), entry.getValue());
                 }
 
-
-
-
-
                 if (this.downloaded_size == 0) {
-                    this.print("已经下载的长度mmm 00 "+ this.downloaded_size);
+                    this.print("Already downloaded length mmm 00 "+ this.downloaded_size);
                     if(this.thread_data.size()==this.threads.length){
 //                        for (int i = 0; i < this.threads.length; i++) {
 //                            this.downloaded_size += this.thread_data.get(i+1);
 //                        }
 
                         downloaded_size = file_record.get_downloaded_size(download_url);
-                        this.print("已经下载的长度mmm "+ this.downloaded_size);
+                        this.print("Already downloaded length mmm "+ this.downloaded_size);
                     }
 
                 }
 
-
-
-                //计算每条线程下载的数据长度
+                //Download the data to calculate the length of each thread
                 this.block = (this.file_size % this.threads.length)==0?
                         this.file_size / this.threads.length :
                         this.file_size / this.threads.length + 1;
-                Log.i("每条线程下载的数据长度 ", Integer.toString(block));
+                Log.i("Download the data length of each thread", Integer.toString(block));
             }else{
                 throw new RuntimeException("server no response ");
             }
         } catch (Exception e) {
-            Log.i("下载错误 ", e.getMessage());
+            Log.i("Download Error", e.getMessage());
             e.printStackTrace();
         }
     }
 
-
-
-
-
     public void save_thread_data() {
 
         try {
-            Log.i("保存调试0 ", this.save_file.getAbsolutePath());
+            Log.i("Save debugging 0", this.save_file.getAbsolutePath());
             RandomAccessFile rand_out = new RandomAccessFile(this.save_file, "rw");
-            Log.i("保存调试000 ", "true");
+            Log.i("Save debugging 000", "true");
             if(this.file_size >0) rand_out.setLength(this.file_size);
             rand_out.close();
-            Log.i("保存调试1 ", "true");
+            Log.i("Save debugging 1", "true");
             url = new URL(this.download_url);
-            Log.i("保存调试2 ", "true");
+            Log.i("Save debugging 2", "true");
             if(this.thread_data.size() != this.threads.length){
-                Log.i("保存调试3 ", "true");
+                Log.i("Save debugging 3", "true");
                 this.thread_data.clear();
                 for (int i = 0; i < this.threads.length; i++) {
-                    Log.i("保存调试4 ", "true");
+                    Log.i("Save debugging 4", "true");
                     this.thread_data.put(i+1, 0);
                 }
             }
-            Log.i("保存调试5 ", "true");
+            Log.i("Save debugging 5", "true");
             if (this.block <= 0) {
-                Log.i("保存调试6 ", "true");
+                Log.i("Save debugging 6", "true");
             }
 
             if (this.threads == null) {
-                Log.i("保存调试7 ", "true");
+                Log.i("Save debugging 7", "true");
             }
 
             if (this.thread_data == null) {
-                Log.i("保存调试8 ", "true");
+                Log.i("Save debugging 8", "true");
             }
 
             if (this.downloaded_size <= 0) {
-                Log.i("保存调试9 ", "true");
+                Log.i("Save debugging 9", "true");
             }
 
             if (this.file_size <= 0) {
-                Log.i("保存调试10 ", "true");
+                Log.i("Save debugging 10", "true");
             }
 
 
             for (int i = 0; i < this.threads.length; i++) {
                 int downLength = this.thread_data.get(i+1);
-
-                Log.i("downLength 大小 ", Integer.toString(downLength));
-                Log.i("block 大小 ", Integer.toString(block));
-                Log.i("downloaded_size 大小 ", Integer.toString(downloaded_size));
-                Log.i("file_size 大小 ", Integer.toString(file_size));
+                
+                Log.i("downLength Size", Integer.toString(downLength));
+                Log.i("block Size", Integer.toString(block));
+                Log.i("downloaded_size Size", Integer.toString(downloaded_size));
+                Log.i("file_size Size", Integer.toString(file_size));
 
                 if(downLength < this.block && this.downloaded_size <this.file_size){
-                    Log.i("开始进行线程下载 ", "true");
+                    Log.i("Start-threaded download", "true");
                     this.threads[i] = new DownloadThread(
                             this,
                             url,
@@ -782,41 +702,40 @@ public class FileDownloader implements Parcelable  {
                 this.file_record.save(this.download_url,
                         this.thread_data);
 
-                Log.i("执行 downlength save ", "true");
+                Log.i("Carried out downlength save ", "true");
             }
 
         } catch (Exception e) {
-            Log.i("保存线程数据错误 ", e.getMessage());
+            Log.i("Save the thread data errors", e.getMessage());
         }
 
     }
-
 
     public void continue_download_with_thread() {
 
         for (int i = 0; i < this.threads.length; i++){
 
             if (this.threads == null) {
-                Log.i("threads 为空  ", "true");
+                Log.i("threads Null", "true");
             }
             Log.i("threads length ", Integer.toString(this.threads.length));
             // Log.i("thread id ", Long.toString(this.threads[i].getId()));
 
 
             if (should_pause || should_destroy) {
-                Log.i("service中的线程可以停止loop了 ", "true");
+                Log.i("The service can stop loop of thread", "true");
                 return;
             }
 
             if (this.threads[i] != null && !this.threads[i].is_finish()) {
                 is_finished = false;
-                Log.i("一直在下载 000 ", "true");
+                Log.i("Has been downloaded 000", "true");
                 if (this.threads[i].isInterrupted()) {
                     this.threads[i].start();
-                    Log.i("thread 启动中 ", "true");
+                    Log.i("thread start of", "true");
                 }
                 if(this.threads[i].get_downloaded_length() == -1){
-                    Log.i("一直在下载 111 ", "true");
+                    Log.i("Has been downloaded 111 ", "true");
                     this.threads[i] = new DownloadThread(
                             this,
                             url,
@@ -835,17 +754,16 @@ public class FileDownloader implements Parcelable  {
     public void send_broadcast() {
         Intent in = new Intent("app.action.download_listener_receiver");
         in.putExtra("download_manager", this);
-        Log.i("service 中 downloaded_size ", Integer.toString(this.downloaded_size));
+        Log.i("service in downloaded_size", Integer.toString(this.downloaded_size));
         context.sendBroadcast(in);
     }
-
-
+    
     public void clear_local_thread_data() {
         try {
             new FileRecord(context).delete(download_url);
-            Log.i("清理 cache 数据　", "true");
+            Log.i("Clean up cache data", "true");
         } catch (Exception e) {
-            Log.i("清理 cache 数据错误 ", e.toString());
+            Log.i("Clean up cache data errors", e.toString());
             e.printStackTrace();
         }
     }
@@ -853,14 +771,11 @@ public class FileDownloader implements Parcelable  {
     public void delete_file() {
         try {
             save_file.delete();
-            Log.i("清理 save_file　", "true");
+            Log.i("Clear up save_file", "true");
         } catch (Exception e) {
-            Log.i("清理 save_file ", e.toString());
+            Log.i("Clear up save_file", e.toString());
             e.printStackTrace();
         }
     }
-
-
-
 
 }
