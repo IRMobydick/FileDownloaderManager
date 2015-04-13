@@ -14,13 +14,13 @@ public class DownloadPauseReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("调试 pause 接收最新 fd ", "true");
+        Log.i("Debugging pause to receive the latest fd", "true");
 
         fd = intent.getParcelableExtra("download_manager");
-        Log.i("调试 pause 接收最新 fd file_size ", Integer.toString(fd.file_size));
+        Log.i("Debugging pause to receive the latest fd file_size", Integer.toString(fd.file_size));
         file_size = fd.file_size;
 
-        Log.i("调试 pause 接收最新 fd downloaded_size ", Integer.toString(fd.downloaded_size));
+        Log.i("Debugging pause to receive the latest fd downloaded_size", Integer.toString(fd.downloaded_size));
         downloaded_size = fd.downloaded_size;
 
     }
