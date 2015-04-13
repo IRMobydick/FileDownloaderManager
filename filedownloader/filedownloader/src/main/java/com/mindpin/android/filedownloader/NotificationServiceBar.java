@@ -64,10 +64,10 @@ public class NotificationServiceBar {
                 start_foreground_method.invoke(this, start_foreground_args);
             } catch (InvocationTargetException e) {
                 // Should not happen.
-                Log.i("无法启动前台服务 ", e.getMessage());
+                Log.i("Unable to start the front desk", e.getMessage());
             } catch (IllegalAccessException e) {
                 // Should not happen.
-                Log.i("无法启动前台服务 ", e.getMessage());
+                Log.i("Unable to start the front desk", e.getMessage());
             }
             return;
         }
@@ -85,10 +85,10 @@ public class NotificationServiceBar {
                 stop_foreground_method.invoke(this, stop_foreground_args);
             } catch (InvocationTargetException e) {
                 // Should not happen.
-                Log.i("无法关掉前台服务 ", e.getMessage());
+                Log.i("Unable to turn off the front desk", e.getMessage());
             } catch (IllegalAccessException e) {
                 // Should not happen.
-                Log.i("无法关掉前台服务 ", e.getMessage());
+                Log.i("Unable to turn off the front desk", e.getMessage());
             }
             return;
         }
@@ -134,8 +134,8 @@ public class NotificationServiceBar {
         // content_view.setTextViewText(R.id.download_filename, "");
 
         content_view.setTextViewText(R.id.progress_percentage, downloaded_size + " / " + file_size);
-        Log.i("显示正在下载的大小 ", Integer.toString(file_downloader.downloaded_size));
-        Log.i("显示文件的大小 ", Integer.toString(file_downloader.file_size));
+        Log.i("Display size being downloaded", Integer.toString(file_downloader.downloaded_size));
+        Log.i("Display file size", Integer.toString(file_downloader.file_size));
         content_view.setProgressBar(R.id.download_progressbar_in_service,
                 file_downloader.file_size,
                 file_downloader.downloaded_size, false);
@@ -154,7 +154,7 @@ public class NotificationServiceBar {
 
 
         String param_name1 = file_downloader.intent_extras.getString("param_name1");
-        Log.i("notification bar 测试值  ", param_name1);
+        Log.i("notification bar Test values", param_name1);
         if (file_downloader.intent_extras != null) {
             notice_intent.putExtras(file_downloader.intent_extras);
         }
@@ -182,11 +182,11 @@ public class NotificationServiceBar {
         String file_size;
 
         if (file_downloader.should_pause || file_downloader.should_destroy) {
-            Log.i("不需要进入等待状态 ", "true");
+            Log.i("Do not need to enter the wait state", "true");
             return;
         }
 
-        Log.i("等待状态", "true");
+        Log.i("Wait state", "true");
 
 //        String downloaded_size = Integer.toString(0);
 //        String file_size = Integer.toString(0);
@@ -196,7 +196,7 @@ public class NotificationServiceBar {
         android.support.v4.app.NotificationCompat.Builder mBuilder =
                 new android.support.v4.app.NotificationCompat.Builder(context);
         mBuilder.setContentTitle("Download")
-                .setContentText("等待下载")
+                .setContentText("Wait for the download")
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis());
@@ -220,10 +220,10 @@ public class NotificationServiceBar {
 
 
         // content_view.setTextViewText(R.id.download_filename, "");
-        content_view.setTextViewText(R.id.wait_text, "等待下载");
+        content_view.setTextViewText(R.id.wait_text, "Wait for the download");
 
         content_view.setTextViewText(R.id.progress_percentage, downloaded_size + " / " + file_size);
-        Log.i("显示正在下载的大小 ", Integer.toString(file_downloader.downloaded_size));
+        Log.i("Display size being downloaded", Integer.toString(file_downloader.downloaded_size));
 
 //        content_view.setProgressBar(R.id.download_progressbar_in_service,
 //                file_downloader.file_size,
@@ -231,11 +231,11 @@ public class NotificationServiceBar {
 
 
         if (file_downloader.activity_class == null) {
-            Log.i("调试 activity_class 为 null", "true");
+            Log.i("Debugging activity_class is null", "true");
         }
 
         if (file_downloader.context == null) {
-            Log.i("调试 context 为 null", "true");
+            Log.i("Debugging context is null", "true");
         }
 
         final ComponentName receiver = new ComponentName(file_downloader.context,
@@ -281,7 +281,7 @@ public class NotificationServiceBar {
         android.support.v4.app.NotificationCompat.Builder mBuilder =
                 new android.support.v4.app.NotificationCompat.Builder(context);
         mBuilder.setContentTitle(Tool.get_prefix_filename(file_downloader.get_file_name()))
-                .setContentText("多个文件正在下载")
+                .setContentText("Downloading multiple files")
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis());
@@ -299,7 +299,7 @@ public class NotificationServiceBar {
 
 
         String param_name1 = file_downloader.intent_extras.getString("param_name1");
-        Log.i("notification bar 测试值  ", param_name1);
+        Log.i("notification bar Test values", param_name1);
         if (file_downloader.intent_extras != null) {
             notice_intent.putExtras(file_downloader.intent_extras);
         }
@@ -347,7 +347,7 @@ public class NotificationServiceBar {
 
 
         content_view.setTextViewText(R.id.progress_percentage, downloaded_size + " / " + file_size);
-        content_view.setTextViewText(R.id.wait_text, "下载暂停");
+        content_view.setTextViewText(R.id.wait_text, "Download paused");
 
 
 
@@ -361,7 +361,7 @@ public class NotificationServiceBar {
 
 
         String param_name1 = file_downloader.intent_extras.getString("param_name1");
-        Log.i("notification bar 测试值  ", param_name1);
+        Log.i("notification bar Test values", param_name1);
         if (file_downloader.intent_extras != null) {
             notice_intent.putExtras(file_downloader.intent_extras);
         }
