@@ -10,7 +10,7 @@ import android.util.Log;
 public class DownloadProgressNotificationWidget extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("hello 我在这 ", "true");
+        Log.i("hello I'm here :D", "true");
 
         Bundle extras = intent.getExtras();
         String target_activity_name = intent.getStringExtra("activity_class");
@@ -19,11 +19,11 @@ public class DownloadProgressNotificationWidget extends BroadcastReceiver {
         try {
             target_activity = Class.forName(target_activity_name);
         } catch (Exception e) {
-            Log.i(" String 转换成 Class 错误 ", e.getMessage());
+            Log.i("String converted into Class error", e.getMessage());
         }
 
 
-        Log.i("目标 activity ", target_activity.getName());
+        Log.i("Target activity", target_activity.getName());
 
 
         Intent download_service = new Intent(context, DownloadService.class);
