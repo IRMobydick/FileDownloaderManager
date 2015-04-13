@@ -36,7 +36,7 @@ public class DownloadThread extends Thread {
 
     @Override
     public void run() {
-        //未下载完成
+        //No download is complete
         if(downloaded_length < block){
             try {
                 HttpURLConnection http = (HttpURLConnection) download_url.openConnection();
@@ -54,9 +54,9 @@ public class DownloadThread extends Thread {
                     end_pos = downloader.file_size - 1;
                 }
 
-                //设置获取实体数据的范围
-                Log.i("线程开始点 ", Integer.toString(start_pos));
-                Log.i("线程结束点 ", Integer.toString(end_pos));
+                //Setting range of data acquisition entity
+                Log.i("Thread starting point", Integer.toString(start_pos));
+                Log.i("Thread starting point", Integer.toString(end_pos));
                 http.setRequestProperty("Range", "bytes=" + start_pos + "-"+ end_pos);
                 http.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)");
                 http.setRequestProperty("Connection", "Keep-Alive");
@@ -64,18 +64,18 @@ public class DownloadThread extends Thread {
                 InputStream inStream = http.getInputStream();
                 byte[] buffer = new byte[1024];
                 int offset;
-                print("线程 " + this.thread_id + " start download from position "+ start_pos);
+                print("Thread" + this.thread_id + " start download from position "+ start_pos);
                 RandomAccessFile threadfile = new RandomAccessFile(this.save_file, "rwd");
                 threadfile.seek(start_pos);
                 while ((offset = inStream.read(buffer, 0, 1024)) != -1) {
                     if (downloader.should_destroy) {
-                        Log.i("线程可以停止运行了 ", "true");
+                        Log.i("You can stop the running thread", "true");
                         this.interrupt();
                         return;
                     }
 
                     if (downloader.should_pause) {
-                        Log.i("线程可以停止运行了 ", "true");
+                        Log.i("You can stop the running thread", "true");
                         this.interrupt();
                         return;
                     }
@@ -87,16 +87,16 @@ public class DownloadThread extends Thread {
                     downloader.append(offset);
 
 
-                    Log.i("线程" + this.thread_id + " offset ", Integer.toString(offset));
-                    Log.i("线程" + this.thread_id + " loop size ", Integer.toString(downloaded_length));
+                    Log.i("Thread " + this.thread_id + " offset ", Integer.toString(offset));
+                    Log.i("Thread " + this.thread_id + " loop size ", Integer.toString(downloaded_length));
                 }
                 threadfile.close();
                 inStream.close();
-                print("线程 " + this.thread_id + " download finish");
+                print("Thread " + this.thread_id + " download finish");
                 this.finish = true;
             } catch (Exception e) {
                 this.downloaded_length = -1;
-                print("线程错误 "+ this.thread_id + ":"+ e.getMessage());
+                print("Threading errors "+ this.thread_id + ":"+ e.getMessage());
             }
         }
     }
@@ -112,8 +112,8 @@ public class DownloadThread extends Thread {
 
 
     /**
-     * 已经下载的内容大小
-     * @return 如果返回值为-1,代表下载失败
+     * Already downloaded content size
+     * @return If the return value is -1, representing the download fails
      */
 
     public long get_downloaded_length() {
