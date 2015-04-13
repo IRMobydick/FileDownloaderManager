@@ -26,7 +26,7 @@ public class DownloadDoneNotification extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("已经下载完成 停止服务后 显示的通知 ", "true");
+        Log.i("Has been out of service after the download is complete display notifications", "true");
 
 //        Intent download_service = new Intent(context, DownloadService.class);
 //        download_service.putExtra("should_stop_foreground", true);
@@ -39,11 +39,11 @@ public class DownloadDoneNotification extends BroadcastReceiver {
 //        try {
 //            target_activity = Class.forName(target_activity_name);
 //        } catch (Exception e) {
-//            Log.i(" String 转换成 Class 错误 ", e.getMessage());
+//            Log.i("String converted into Class error", e.getMessage());
 //        }
 //
 //
-//        Log.i("目标 activity ", target_activity.getName());
+//        Log.i("Target activity ", target_activity.getName());
         String filename = intent.getStringExtra("filename");
         String file_size = intent.getStringExtra("file_size");
 
@@ -62,32 +62,25 @@ public class DownloadDoneNotification extends BroadcastReceiver {
 //        String stored_dir = Environment.getExternalStorageDirectory().toString();
 //        String store_file = stored_dir + "/" + filename;
         String store_file = intent.getStringExtra("store_file");
-        Log.i("要打开的文件 ", store_file);
+        Log.i("To open the file", store_file);
         File file = new File(store_file);
 
         Intent notice_intent = new Intent();
         notice_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         notice_intent.setAction(android.content.Intent.ACTION_VIEW);
-        notice_intent.setDataAndType(Uri.fromFile(file),
-                get_mime_type(file.getAbsolutePath()));
-
-
-        PendingIntent p_intent = PendingIntent.getActivity(context, 0, notice_intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
+        notice_intent.setDataAndType(Uri.fromFile(file), get_mime_type(file.getAbsolutePath()));
+        
+        PendingIntent p_intent = PendingIntent.getActivity(context, 0, notice_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification n  = new NotificationCompat.Builder(context)
                 .setContentTitle(Tool.regenerate_filename(filename))
-                .setContentText("下载完成 " + file_size)
+                .setContentText("Download complete" + file_size)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentIntent(p_intent)
 
                 .setAutoCancel(true).getNotification();
 
-
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
         Random rand = new Random();
         int notice_id = rand.nextInt(999999999);
