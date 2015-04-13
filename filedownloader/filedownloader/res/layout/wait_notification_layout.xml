@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/progress_title_text"
             android:layout_marginTop="3dp"
-            android:text="等待下载"
+            android:text="Wait for the download"
             android:textStyle="normal"
             android:textSize="@dimen/text_size"
             android:textColor="#fff">
